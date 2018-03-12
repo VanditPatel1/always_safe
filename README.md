@@ -1,0 +1,1 @@
+always safe -- init repo
