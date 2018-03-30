@@ -31,12 +31,16 @@ class S3_Conn:
             raise
 
     def ls_all(self, bucket=None):
+        """ List all files in bucket """
+
         b = bucket or self.bucket
         list_obj = self.s3.list_objects_v2(Bucket=b)
         response = list_obj['Contents']
         return response
 
     def ls_key(self, prefix, bucket=None):
+        """ Used to look for specifc file """
+
         b = bucket or self.bucket
         prefix = str(prefix) #boto3 expects a string
 
@@ -45,3 +49,12 @@ class S3_Conn:
         except Exception as ex:
             print ("Error finding files with prefix: {0} in bucket: {1}".format(prefix, bucket))
             raise
+
+    def del_obj(self, name, bucket=None):
+        """ Delete object from remote bucket """
+        b = bucket or self.bucket
+        name = str(name) #Must be string type
+        try:
+            del_status = self.s3.delete_object(Bucket=b, Key=name)
+        except Exception as ex:
+            print ("Could not delete: {0}, from bucket: {1}".format(name, b))
